@@ -27,6 +27,10 @@ async function getProcess(opts) {
   }
 }
 
+function getActiveProcess() {
+  return activeProcess;
+}
+
 function parseAddr(message) {
   if (message[0] === "{") {
     const parsed = JSON.parse(message);
@@ -159,6 +163,7 @@ async function getVersion(opts = {}) {
 
 module.exports = {
   getProcess,
+  getActiveProcess,
   killProcess,
   setAuthtoken,
   getVersion,

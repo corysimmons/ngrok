@@ -21,6 +21,7 @@
     * [Delete all requests](#delete-all-requests)
     * [Request detail](#request-detail)
   * [Proxy](#proxy)
+* [Expo changes](#expo-changes)
 * [How it works](#how-it-works)
 * [ngrok binary update](#ngrok-binary-update)
 * [Using with nodemon](#using-with-nodemon)
@@ -221,6 +222,15 @@ const request = await api.requestDetail(requestId);
 
 - If you are behind a corporate proxy and have issues installing ngrok, you can set ```HTTPS_PROXY``` env var to fix it. ngrok's postinstall scripts uses the [`got`](https://www.npmjs.com/package/got) module to fetch the binary and the [`hpagent`](https://github.com/delvedor/hpagent) module to support HTTPS proxies. You will need to install the `hpagent` module as a dependency
 - If you are using a CA file, set the path in the environment variable `NGROK_ROOT_CA_PATH`. The path is needed for downloading the ngrok binary in the postinstall script
+
+## Expo changes
+
+### Get active process handle
+
+To get a handle to the spawned ngrok process use
+```javascript
+ngrok.getActiveProcess(); // returns ChildProcess
+```
 
 ## How it works
 

@@ -1,3 +1,4 @@
+import { ChildProcess } from "child_process";
 import { Response } from "got";
 
 declare module "ngrok" {
@@ -40,6 +41,11 @@ declare module "ngrok" {
    * Gets the ngrok client API.
    */
   export function getApi(): NgrokClient | null;
+
+  /**
+   * Gets the ngrok active process handle.
+   */
+  export function getActiveProcess(): ChildProcess | null;
 
   /**
    * You can create basic http-https-tcp tunnel without authtoken.
