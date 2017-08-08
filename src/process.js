@@ -92,6 +92,10 @@ async function startProcess(opts) {
     activeProcess = null;
   });
 
+  ngrok.on("error", (err) => {
+    reject(err);
+  });
+
   try {
     const url = await apiUrl;
     activeProcess = ngrok;
@@ -142,6 +146,7 @@ async function setAuthtoken(optsOrToken) {
   const killed = new Promise((resolve, reject) => {
     ngrok.stdout.once("data", () => resolve());
     ngrok.stderr.once("data", () => reject(new Error("cant set authtoken")));
+    ngrok.on("error", (err) => reject(err));
   });
 
   try {
