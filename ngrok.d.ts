@@ -124,11 +124,6 @@ declare module "ngrok" {
       configPath?: string;
 
       /**
-       * Custom binary path, eg for prod in electron
-       */
-      binPath?: (defaultPath: string) => string;
-
-      /**
        * Callback called when ngrok logs an event.
        */
       onLogEvent?: (logEventMessage: string) => any;

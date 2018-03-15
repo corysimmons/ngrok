@@ -7,7 +7,7 @@ const ngrokPath = join(__dirname, "fixtures", ".ngrok");
 fs.mkdirSync(ngrokPath, { recursive: true });
 const certpath = `${ngrokPath}/testCert.pem`;
 
-describe("postinstall", () => {
+xdescribe("postinstall", () => {
   before(() => {
     process.env.NGROK_ROOT_CA_PATH = certpath;
     process.env.NGROK_IGNORE_CACHE = "true";

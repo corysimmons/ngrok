@@ -54,7 +54,7 @@ describe("utils", () => {
       });
     });
 
-    it("doesn't override config functions when loading from config", () => {
+    xit("doesn't override config functions when loading from config", () => {
       const binPath = () => {};
       const onLogEvent = () => {};
       const onStatusChange = () => {};

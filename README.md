@@ -232,6 +232,10 @@ To get a handle to the spawned ngrok process use
 ngrok.getActiveProcess(); // returns ChildProcess
 ```
 
+### Use @expo/ngrok-bin to manage ngrok binaries
+
+Benefit for versioning the binaries. The `binPath` option is unsupported then.
+
 ## How it works
 
 ```npm install``` downloads the ngrok binary for your platform from the official ngrok hosting. To host binaries yourself set the `NGROK_CDN_URL` environment variable before installing ngrok. To force specific platform set `NGROK_ARCH`, eg `NGROK_ARCH=freebsdia32`.
