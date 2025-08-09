@@ -28,18 +28,26 @@ class NgrokClient {
       }
     } catch (error) {
       let clientError;
-      try {
-        const response = JSON.parse(error.response.body);
+      if (error.response && error.response.body) {
+        try {
+          const response = JSON.parse(error.response.body);
+          clientError = new NgrokClientError(
+            response.msg,
+            error.response,
+            response
+          );
+        } catch (e) {
+          clientError = new NgrokClientError(
+            error.response.body,
+            error.response,
+            error.response.body
+          );
+        }
+      } else {
         clientError = new NgrokClientError(
-          response.msg,
+          error.message || 'Unknown error',
           error.response,
-          response
-        );
-      } catch (e) {
-        clientError = new NgrokClientError(
-          error.response.body,
-          error.response,
-          error.response.body
+          null
         );
       }
       throw clientError;
@@ -52,8 +60,16 @@ class NgrokClient {
         (response) => response.statusCode === 204
       );
     } catch (error) {
-      const response = JSON.parse(error.response.body);
-      throw new NgrokClientError(response.msg, error.response, response);
+      if (error.response && error.response.body) {
+        try {
+          const response = JSON.parse(error.response.body);
+          throw new NgrokClientError(response.msg, error.response, response);
+        } catch (e) {
+          throw new NgrokClientError(error.response.body, error.response, error.response.body);
+        }
+      } else {
+        throw new NgrokClientError(error.message || 'Unknown error', error.response, null);
+      }
     }
   }
 

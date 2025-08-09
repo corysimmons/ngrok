@@ -1,6 +1,19 @@
-# ngrok [![Tests](https://github.com/bubenshchykov/ngrok/workflows/Tests/badge.svg)](https://github.com/bubenshchykov/ngrok/actions) ![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg) [![npm](https://img.shields.io/npm/v/ngrok.svg)](https://www.npmjs.com/package/ngrok) [![npm](https://img.shields.io/npm/dm/ngrok.svg)](https://www.npmjs.com/package/ngrok)
+# ngrok-updated 
+
+![TypeScript compatible](https://img.shields.io/badge/typescript-compatible-brightgreen.svg) [![npm](https://img.shields.io/npm/v/ngrok-updated.svg)](https://www.npmjs.com/package/ngrok-updated)
+
+**Updated Node.js wrapper for ngrok with latest binary support (v3.26.0+)**
+
+This package provides the same API as the original `@expo/ngrok` package but uses the latest ngrok binaries, fixing the authentication issues with older versions.
 
 ![alt ngrok.com](https://ngrok.com/static/img/overview.png)
+
+## 🚀 Key Improvements
+
+- **Latest ngrok binary**: Uses ngrok v3.26.0 (vs v3.5.0 in @expo/ngrok)
+- **Fixed authentication**: No more "agent version too old" errors  
+- **Updated dependencies**: Modern Node.js support (16+)
+- **Better error handling**: Improved error messages and debugging
 
 * [Usage](#usage)
   * [Local install](#local-install)
@@ -36,13 +49,13 @@
 Install the package with npm:
 
 ```bash
-npm install ngrok
+npm install ngrok-updated
 ```
 
 Then use `ngrok.connect()` to start ngrok and open a tunnel.
 
 ```javascript
-const ngrok = require('ngrok');
+const ngrok = require('ngrok-updated');
 (async function() {
   const url = await ngrok.connect();
 })();

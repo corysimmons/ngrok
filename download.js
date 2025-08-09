@@ -12,6 +12,7 @@ function downloadNgrok(callback, options) {
   const path = require("path");
   const readline = require("readline");
   const Zip = require("decompress-zip");
+  const tar = require("tar");
   const got = require("got");
 
   const cafilePath = options.cafilePath || process.env.NGROK_ROOT_CA_PATH;
@@ -35,21 +36,21 @@ function downloadNgrok(callback, options) {
     const cdnPath =
       options.cdnPath ||
       process.env.NGROK_CDN_PATH ||
-      "/c/4VmDzA7iaHb/ngrok-stable-";
+      "/c/bNyj1mQVY4c/ngrok-v3-stable-";
     const cdnFiles = {
-      darwinia32: cdn + cdnPath + "darwin-386.zip",
-      darwinx64: cdn + cdnPath + "darwin-amd64.zip",
-      darwinarm64: cdn + cdnPath + "darwin-amd64.zip",
-      linuxarm: cdn + cdnPath + "linux-arm.zip",
-      linuxarm64: cdn + cdnPath + "linux-arm64.zip",
-      androidarm: cdn + cdnPath + "linux-arm.zip",
-      androidarm64: cdn + cdnPath + "linux-arm64.zip",
-      linuxia32: cdn + cdnPath + "linux-386.zip",
-      linuxx64: cdn + cdnPath + "linux-amd64.zip",
+      darwinia32: cdn + cdnPath + "darwin-386.tgz",
+      darwinx64: cdn + cdnPath + "darwin-amd64.tgz",
+      darwinarm64: cdn + cdnPath + "darwin-arm64.tgz",
+      linuxarm: cdn + cdnPath + "linux-arm.tgz",
+      linuxarm64: cdn + cdnPath + "linux-arm64.tgz",
+      androidarm: cdn + cdnPath + "linux-arm.tgz",
+      androidarm64: cdn + cdnPath + "linux-arm64.tgz",
+      linuxia32: cdn + cdnPath + "linux-386.tgz",
+      linuxx64: cdn + cdnPath + "linux-amd64.tgz",
       win32ia32: cdn + cdnPath + "windows-386.zip",
       win32x64: cdn + cdnPath + "windows-amd64.zip",
-      freebsdia32: cdn + cdnPath + "freebsd-386.zip",
-      freebsdx64: cdn + cdnPath + "freebsd-amd64.zip",
+      freebsdia32: cdn + cdnPath + "freebsd-386.tgz",
+      freebsdx64: cdn + cdnPath + "freebsd-amd64.tgz",
     };
     const url = cdnFiles[arch];
     if (!url) {
@@ -73,7 +74,8 @@ function downloadNgrok(callback, options) {
       dir = path.join(__dirname, "bin");
     }
     const name = Buffer.from(cdnUrl).toString("base64");
-    return path.join(dir, name + ".zip");
+    const extension = cdnUrl.endsWith('.zip') ? '.zip' : '.tgz';
+    return path.join(dir, name + extension);
   }
 
   function hasCache() {
@@ -148,22 +150,40 @@ function downloadNgrok(callback, options) {
   function extract(cb) {
     console.error("ngrok - unpacking binary");
     const moduleBinPath = path.join(__dirname, "bin");
-    new Zip(cacheUrl)
-      .extract({ path: moduleBinPath })
-      .once("error", error)
-      .once("extract", () => {
-        const suffix = os.platform() === "win32" ? ".exe" : "";
-        if (suffix === ".exe") {
-          fs.writeFileSync(path.join(moduleBinPath, "ngrok.cmd"), "ngrok.exe");
-        }
-        const target = path.join(moduleBinPath, "ngrok" + suffix);
-        fs.chmodSync(target, 0755);
-        if (!fs.existsSync(target) || fs.statSync(target).size <= 0) {
-          return error(new Error("corrupted file " + target));
-        }
-        console.log("ngrok - binary unpacked to " + target);
-        cb(null);
-      });
+    const isZip = cacheUrl.endsWith('.zip');
+    
+    if (isZip) {
+      new Zip(cacheUrl)
+        .extract({ path: moduleBinPath })
+        .once("error", error)
+        .once("extract", onExtractComplete);
+    } else {
+      // Handle .tgz files
+      try {
+        tar.x({
+          file: cacheUrl,
+          cwd: moduleBinPath,
+          sync: true
+        });
+        onExtractComplete();
+      } catch (e) {
+        error(e);
+      }
+    }
+
+    function onExtractComplete() {
+      const suffix = os.platform() === "win32" ? ".exe" : "";
+      if (suffix === ".exe") {
+        fs.writeFileSync(path.join(moduleBinPath, "ngrok.cmd"), "ngrok.exe");
+      }
+      const target = path.join(moduleBinPath, "ngrok" + suffix);
+      fs.chmodSync(target, 0755);
+      if (!fs.existsSync(target) || fs.statSync(target).size <= 0) {
+        return error(new Error("corrupted file " + target));
+      }
+      console.log("ngrok - binary unpacked to " + target);
+      cb(null);
+    }
 
     function error(e) {
       console.error("ngrok - error unpacking binary", e);

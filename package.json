@@ -1,48 +1,55 @@
 {
-  "name": "@expo/ngrok",
-  "version": "4.1.3",
-  "description": "node wrapper for ngrok",
+  "name": "ngrok-updated",
+  "version": "5.0.0",
+  "description": "Updated node wrapper for ngrok with latest binary support",
   "main": "index.js",
   "types": "ngrok.d.ts",
   "scripts": {
-    "test": "mocha --exit"
+    "test": "mocha --exit",
+    "postinstall": "node postinstall.js"
   },
   "files": [
     "index.js",
     "ngrok.d.ts",
     "src/client.js",
     "src/process.js",
-    "src/utils.js"
+    "src/utils.js",
+    "download.js",
+    "postinstall.js",
+    "bin/"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/expo/ngrok.git"
+    "url": "https://github.com/corysimmons/ngrok-updated.git"
   },
   "keywords": [
     "ngrok",
     "localhost",
     "tunneling",
     "localtunnel",
-    "webhook"
+    "webhook",
+    "updated",
+    "latest"
   ],
-  "author": "bubenshchykov",
+  "author": "Updated by Claude",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/expo/ngrok/issues"
+    "url": "https://github.com/corysimmons/ngrok-updated/issues"
   },
   "devDependencies": {
-    "@types/node": "^8.10.50",
+    "@types/node": "^18.0.0",
     "chai": "^4.3.4",
     "colors": "^1.4.0",
-    "mocha": "^8.3.2"
+    "mocha": "^10.0.0"
   },
   "dependencies": {
-    "@expo/ngrok-bin": "2.3.42",
+    "decompress-zip": "^0.3.3",
     "got": "^11.5.1",
+    "tar": "^6.0.0",
     "uuid": "^3.3.2",
     "yaml": "^1.10.0"
   },
   "engines": {
-    "node": ">=10.19.0"
+    "node": ">=16.0.0"
   }
 }

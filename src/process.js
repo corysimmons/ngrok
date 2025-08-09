@@ -1,7 +1,9 @@
 const { promisify } = require("util");
 const { spawn, exec: execCallback } = require("child_process");
 const exec = promisify(execCallback);
-const bin = require("@expo/ngrok-bin");
+const path = require("path");
+const os = require("os");
+const bin = path.join(__dirname, "..", "bin", "ngrok" + (os.platform() === "win32" ? ".exe" : ""));
 
 const ready = /starting web service.*addr=(\d+\.\d+\.\d+\.\d+:\d+)/;
 const inUse = /address already in use/;
